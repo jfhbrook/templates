@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{cookiecutter.package_name}}"
+version = "{{cookiecutter.package_version}}"
+authors = [
+  {name = "{{cookiecutter.author_name}}", email = "{{cookiecutter.author_email}}"}
+]
+description = "{{cookiecutter.package_description}}"
+readme = "README.md"
+keywords = []
+{% if cookiecutter.license != "unlicensed" %}license = { text = "{{cookiecutter.license}}" }{% endif %}
+dependencies = []
+{% if cookiecutter.use_click == "y" %}
+[project.scripts]
+{{cookiecutter.package_name}} = "{{cookiecutter.package_name}}:main"{% endif %}
+
+[project.optional-dependencies]
+dev = [
+  "flake8",
+  "flake8-black",
+  "pytest",
+  "black",{% if cookiecutter.use_click == "y" %}
+  "click",{% endif %}
+  "isort",{% if cookiecutter.use_jupyterlab == "n" %}
+  "jupyter-console",{% else %}
+  "jupyterlab",{% endif %}
+  "mkdocs",
+  "mkdocs-bootstrap386",
+  "mkdocstrings[python]",
+  "tox",
+  "twine",
+  "validate-pyproject[all]",
+]
+
+[tool.isort]
+profile = "appnexus"
+known_application = "{{cookiecutter.package_name}}"
+
+[tool.pyright]
+include = ["{{cookiecutter.package_name}}", "tests"]
+
+[tool.pytest]
+addopts = "--verbose -s"
+testpaths = [ "tests" ]
+
+[tool.setuptools]
+packages = [ "{{ cookiecutter.package_name }}" ]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
+optional-dependencies.dev = { file = ["requirements_dev.txt"] }

@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+
+ESC=""
+ARGV=()
+TEMPLATE=""
+
+HELP="USAGE: templatize [options] TEMPLATE
+
+Generate a new project from one of Josh H's templates using cookiecutter.
+
+Options:
+  --help  Show this message and exit.
+  --      Pass all remaining arguments to cookiecutter.
+
+  Other options are passed to cookiecutter.
+
+Available Templates:
+  pypackage  A generic Python package.
+  tspackage  A generic TypeScript package.
+  nestjs     A simple NestJS app.
+  flaskapp   A simple Flask app."
+
+while [[ $# -gt 0 ]]; do
+  case "${1}" in
+    --help)
+      if [ -z "${ESC}" ]; then
+        echo "${HELP}"
+        exit 0
+      fi
+      ;;
+    --)
+      ESC=1
+      shift
+      ;;
+    -*)
+      ARGV+=("${1}")
+      shift
+      ;;
+    *)
+      if [ -z "${ESC}" ] && [ -z "${TEMPLATE}" ]; then
+        TEMPLATE="${1}"
+      else
+        ARGV+=("${1}")
+      fi
+      shift
+      ;;
+  esac
+done
+
+exec cookiecutter "${ARGV[@]}" gh:jfhbrook/templates --directory "${TEMPLATE}" 

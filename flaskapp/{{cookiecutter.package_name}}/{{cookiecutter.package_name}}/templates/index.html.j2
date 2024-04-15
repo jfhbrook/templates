@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+  {{ "{{" }} vite_preamble {{ "}}" }}
+  <head>
+    {{ "{{" }} vite_client {{ "}}" }}
+    <meta charset="UTF-8" />
+    {{ "{{" }} vite_icon("vite.svg") {{ "}}" }}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{{cookiecutter.package_name}}</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    {{ "{{" }} vite_script("src/main.tsx") {{ "}}" }}
+  </body>
+</html>

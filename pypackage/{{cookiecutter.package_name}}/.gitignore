@@ -1,0 +1,11 @@
+*.pyc
+dist/*
+build/*
+.cache
+.eggs
+.python-version
+{{ cookiecutter.package_name}}.egg-info/
+.tox/
+venv
+.env{% if cookiecutter.use_jupyterlab == "n" %}
+.ipynb_checkpoints{% endif %}

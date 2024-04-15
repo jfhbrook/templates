@@ -1,0 +1,2 @@
+vite: flask --app {{cookiecutter.package_name}} vite start
+flask: flask --app {{cookiecutter.package_name}} --debug run

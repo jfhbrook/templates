@@ -1,0 +1,16 @@
+{
+  "package_name": "my_package",
+  "package_version": "1.0.0",
+  "author_name": "Josh Holbrook",
+  "author_email": "josh.holbrook@gmail.com",
+  "package_description": "My package",
+  "use_click": ["n", "y" ],
+  "use_jupyterlab": ["n", "y"],
+  "license": [
+    "Apache-2.0",
+    "MIT",
+    "MPL-2.0",
+    "GPL-3",
+    "unlicensed"
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "package_name": "my_package",
+  "package_version": "1.0.0",
+  "author_name": "Josh Holbrook",
+  "package_description": "My package",
+  "license": [
+    "Apache-2.0",
+    "MIT",
+    "MPL-2.0",
+    "GPL-3",
+    "unlicensed"
+  ]
+}
