@@ -18,6 +18,7 @@ Available Templates:
   pypackage  A generic Python package.
   tspackage  A generic TypeScript package.
   nestjs     A simple NestJS app.
+  psmodule   A PowerShell module.
   flaskapp   A simple Flask app."
 
 while [[ $# -gt 0 ]]; do

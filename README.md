@@ -30,6 +30,11 @@ It uses prettier for formatting, eslint for linting, and node-tap for testing.
 A simple NestJS app. It's similar to the standard NestJS template. However,
 it uses node-tap instead of jest.
 
+### psmodule
+
+A PowerShell module template. It's sparse compared to the others, but includes
+PSScriptAnalyzer and Pester support.
+
 ### flaskapp
 
 A simple Flask app. It's loosely based on the `pypackage` template, and

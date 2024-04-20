@@ -1,0 +1,17 @@
+set dotenv-load := true
+set shell := ["pwsh", "-c"]
+
+install:
+  ./scripts/Install.ps1
+
+test:
+  & ./scripts/Activate.ps1; Invoke-Pester -Output Detailed
+
+lint:
+  & ./scripts/Activate.ps1; Invoke-ScriptAnalyzer -Path . -Recurse
+
+format:
+  & ./scripts/Activate.ps1; Invoke-ScriptAnalyzer -Fix -Path . -Recurse
+
+console:
+  pwsh -NoExit -Command "& ./scripts/Activate.ps1"
