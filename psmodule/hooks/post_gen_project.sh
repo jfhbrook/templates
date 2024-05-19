@@ -1,6 +1,8 @@
 #!/usr/bin/env pwsh
 
-New-ModuleManifest -Path {{ cookiecutter.module_name }}.psd1 `
-  -ModuleVersion "{{ cookiecutter.module_version }}" `
+New-ModuleManifest -Path {{ cookiecutter.component_name }}.psd1 `
+  -RootModule "{{ cookiecutter.component_name }}.psm1" `
+  -ModuleVersion "{{ cookiecutter.component_version }}" `
   -Author "{{ cookiecutter.author_name }}" `
-  -Description "{{ cookiecutter.module_description }}"
+  -Description "{{ cookiecutter.component_description }}" `
+  -FunctionsToExport @("Get-Command")
