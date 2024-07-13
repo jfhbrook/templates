@@ -13,7 +13,8 @@ default:
 #
 
 _venv:
-  if [ ! -d venv ]; then python3 -m venv venv; . ./venv/bin/activate && pip install pip pip-tools wheel; fi
+  if [ ! -d venv ]; then python3 -m venv venv; fi
+  . ./venv/bin/activate && pip install --upgrade pip pip-tools wheel
 
 _clean-venv:
   rm -rf venv
