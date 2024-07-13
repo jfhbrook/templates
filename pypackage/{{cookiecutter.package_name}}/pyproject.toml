@@ -12,7 +12,9 @@ description = "{{cookiecutter.package_description}}"
 readme = "README.md"
 keywords = []
 {% if cookiecutter.license != "unlicensed" %}license = { text = "{{cookiecutter.license}}" }{% endif %}
-dependencies = []
+dependencies = [
+{% if cookiecutter.use_click == "y" %}"click",{% endif %}
+]
 {% if cookiecutter.use_click == "y" %}
 [project.scripts]
 {{cookiecutter.package_name}} = "{{cookiecutter.package_name}}:main"{% endif %}
