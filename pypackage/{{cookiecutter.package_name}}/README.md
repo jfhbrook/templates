@@ -4,8 +4,8 @@ This is the README for {{ cookiecutter.package_name }}.
 
 ## Changelog
 
-See `CHANGELOG.md`.
+See [`CHANGELOG.md`](./CHANGELOG.md).
 
 ## License
 
-{{ cookiecutter.license }}, see ``LICENSE``.
+{{ cookiecutter.license }}, see [`LICENSE`](./LICENSE).
