@@ -53,7 +53,7 @@ _clean-compile:
 #
 
 # Run a command or script
-run *ARGS:
+run *argv:
   uv run {% raw %}{{ argv }}{% endraw %}
 
 # Run the {{cookiecutter.package_name}} cli
@@ -127,13 +127,6 @@ build-docs:
 # Build the package
 build:
   uv build
-
-_clean-build:
-  rm -rf dist
-
-# Build the package
-build:
-  . ./venv/bin/activate && python -m build
 
 _clean-build:
   rm -rf dist
