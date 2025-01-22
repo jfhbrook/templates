@@ -13,24 +13,19 @@ default:
 #
 
 _venv:
-  if [ ! -d venv ]; then python3 -m venv venv; fi
-  . ./venv/bin/activate && pip install --upgrade pip pip-tools wheel
+  if [ ! -d .venv ]; then uv venv; fi
 
 _clean-venv:
-  rm -rf venv
+  rm -rf .venv
 
 # Install all dependencies
 install:
   @just _venv
-  @just compile
-  . ./venv/bin/activate && pip install -r requirements_dev.txt
-  . ./venv/bin/activate && pip install -e .
+  uv sync --dev
+  uv pip install -e .
 
 # Update all dependencies
 update:
-  @just _venv
-  . ./venv/bin/activate && pip install pip pip-tools wheel --upgrade
-  @just _clean-compile
   @just install
 
 # Update all dependencies and rebuild the environment
@@ -40,24 +35,31 @@ upgrade:
 _upgrade:
   @just _clean-venv
   @just _venv
-  @just _clean-compile
-  @just compile
   @just install
 
 # Generate locked requirements files based on dependencies in pyproject.toml
 compile:
-  . ./venv/bin/activate && python -m piptools compile --resolver=backtracking -o requirements.txt pyproject.toml
-  . ./venv/bin/activate && python -m piptools compile --resolver=backtracking --extra=dev -o requirements_dev.txt pyproject.toml
+  uv pip compile -o requirements.txt pyproject.toml
+  cp requirements.txt requirements_dev.txt
+  cat requirements_dev.txt.in >> requirements_dev.txt
 
 _clean-compile:
   rm -f requirements.txt
   rm -f requirements_dev.txt
+
 {% if cookiecutter.use_click == "y" %}
 #
 # Running the CLI
 #
+
+# Run a command or script
 run *ARGS:
-  . ./venv/bin/activate && {{cookiecutter.package_name}} {% raw %}{{ARGS}}{% endraw %}
+  uv run {% raw %}{{ argv }}{% endraw %}
+
+# Run the {{cookiecutter.package_name}} cli
+start *argv:
+  uv run -- {{cookiecutter.package_name}} {% raw %}{{ argv }}{% endraw %}
+
 {% endif %}
 #
 # Development tooling - linting, formatting, etc
@@ -65,21 +67,21 @@ run *ARGS:
 
 # Format with black and isort
 format:
-  . ./venv/bin/activate &&  black './{{cookiecutter.package_name}}' ./tests
-  . ./venv/bin/activate &&  isort --settings-file . './{{cookiecutter.package_name}}' ./tests
+  uv run black './{{cookiecutter.package_name}}' ./tests
+  uv run isort --settings-file . './{{cookiecutter.package_name}}' ./tests
 
 # Lint with flake8
 lint:
-  . ./venv/bin/activate && flake8 './{{cookiecutter.package_name}}' ./tests
-  . ./venv/bin/activate && validate-pyproject ./pyproject.toml
+  uv run flake8 './{{cookiecutter.package_name}}' ./tests
+  uv run validate-pyproject ./pyproject.toml
 
 # Check type annotations with pyright
 check:
-  . ./venv/bin/activate && npx pyright@latest
+  uv run npx pyright@latest
 
 # Run tests with pytest
 test:
-  . ./venv/bin/activate && pytest ./tests
+  uv run pytest ./tests
   @just _clean-test
 
 _clean-test:
@@ -88,7 +90,7 @@ _clean-test:
 
 # Run tests using tox
 tox:
-  . ./venv/bin/activate && tox
+  uv run tox
   @just _clean-tox
 
 _clean-tox:
@@ -99,12 +101,12 @@ _clean-tox:
 #
 
 shell:
-  . ./venv/bin/activate && bash
+  uv run bash
 
 {% if cookiecutter.use_jupyterlab == "n" %}console:
-  . ./venv/bin/activate && jupyter console
+  uv run jupyter console
 {% else %}jupyterlab:
-  . ./venv/bin/activate && jupyter lab{% endif %}
+  uv run jupyter lab{% endif %}
 
 #
 # Documentation
@@ -112,15 +114,22 @@ shell:
 
 # Live generate docs and host on a development webserver
 docs:
-  . ./venv/bin/activate && mkdocs serve
+  uv run mkdocs serve
 
 # Build the documentation
 build-docs:
-  . ./venv/bin/activate && mkdocs build
+  uv run mkdocs build
 
 #
 # Package publishing
 #
+
+# Build the package
+build:
+  uv build
+
+_clean-build:
+  rm -rf dist
 
 # Build the package
 build:
@@ -133,12 +142,8 @@ _clean-build:
 tag:
   . ./venv/bin/activate && git tag -a "$(python3 -c 'import toml; print(toml.load(open("pyproject.toml", "r"))["project"]["version"])')" -m "Release $(python3 -c 'import toml; print(toml.load(open("pyproject.toml", "r"))["project"]["version"])')"
 
-# Upload built packages
-upload:
-  . ./venv/bin/activate && twine upload dist/*
-
-# Build the package and publish it to PyPI
-publish: build upload
+publish: build
+  uv publish
 
 # Clean up loose files
 clean: _clean-venv _clean-compile _clean-test _clean-tox
