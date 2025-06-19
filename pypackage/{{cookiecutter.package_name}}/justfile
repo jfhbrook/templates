@@ -88,14 +88,6 @@ _clean-test:
   rm -f pytest_runner-*.egg
   rm -rf tests/__pycache__
 
-# Run tests using tox
-tox:
-  uv run tox
-  @just _clean-tox
-
-_clean-tox:
-  rm -rf .tox
-
 #
 # Shell and console
 #
@@ -139,7 +131,7 @@ publish: build
   uv publish
 
 # Clean up loose files
-clean: _clean-venv _clean-compile _clean-test _clean-tox
+clean: _clean-venv _clean-compile _clean-test
   rm -rf {{cookiecutter.package_name}}.egg-info
   rm -f {{cookiecutter.package_name}}/*.pyc
   rm -rf {{cookiecutter.package_name}}/__pycache__
